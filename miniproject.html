@@ -1,0 +1,1765 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Chat Analyzer Pro</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <style>
+  .pie-chart{
+  display:block;
+  margin:auto;
+  }
+  .sidebar-nav-btn.active-feat{
+border-color:#a855f7;
+background:linear-gradient(90deg,rgba(168,85,247,0.35),rgba(124,58,237,0.2));
+color:#fff;
+box-shadow:0 0 15px rgba(168,85,247,0.6);
+}
+.sidebar-nav-btn:hover{
+border-color:#a855f7;
+background:rgba(168,85,247,0.15);
+}
+  .hour-bar{
+width:14px;
+border-radius:10px;
+background:linear-gradient(180deg,#a78bfa,#7c3aed);
+box-shadow:0 4px 12px rgba(124,58,237,.35);
+transition:all .25s ease;
+}
+
+.hour-bar:hover{
+transform:translateY(-3px);
+box-shadow:0 8px 18px rgba(124,58,237,.55);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+height:100%;
+font-family:'Outfit',sans-serif;
+overflow-x:hidden;
+overflow-y:auto;
+}
+body{background:#0a0a0f}
+#app-root{
+min-height:100vh;
+overflow-x:hidden;
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:rgba(255,255,255,0.03)}
+::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.4);border-radius:3px}
+.glass{background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08)}
+.glass-strong{background:rgba(255,255,255,0.07);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.12)}
+.glow-purple{
+box-shadow:0 0 30px rgba(168,85,247,0.35),
+0 0 60px rgba(168,85,247,0.15)
+}:0 0 30px rgba(16,185,129,0.15)}
+.glow-rose{box-shadow:0 0 30px rgba(244,63,94,0.15)}
+.glow-amber{box-shadow:0 0 30px rgba(245,158,11,0.15)}
+.grad-purple{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.grad-emerald{background:linear-gradient(135deg,#10b981,#06b6d4)}
+.grad-rose{background:linear-gradient(135deg,#f43f5e,#ec4899)}
+.grad-amber{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+.page{display:none;animation:fadeUp .5s ease}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 20px rgba(99,102,241,0.2)}50%{box-shadow:0 0 40px rgba(99,102,241,0.4)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes countUp{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes pieReveal{from{opacity:0;transform:scale(0.3) rotate(-180deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
+@keyframes pieSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes barGrow{from{opacity:0;height:0}to{opacity:1;height:var(--bar-height)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+@keyframes slideInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeInScale{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+@keyframes hoverLift{to{transform:translateY(-8px);box-shadow:0 20px 40px rgba(99,102,241,0.2)}}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes buttonPulse{
+0%,100%{box-shadow:0 0 0 0 rgba(168,85,247,0.7)}
+50%{box-shadow:0 0 0 12px rgba(168,85,247,0)}
+}
+@keyframes textGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes rotateIn{from{opacity:0;transform:rotate(-10deg) scale(0.8)}to{opacity:1;transform:rotate(0deg) scale(1)}}
+@keyframes checkmark{0%{stroke-dashoffset:24}to{stroke-dashoffset:0}}
+@keyframes shimmerPulse{0%{box-shadow:0 0 0 0 rgba(99,102,241,0.4)}100%{box-shadow:0 0 0 10px rgba(99,102,241,0)}}
+@keyframes bounceIn{0%{opacity:0;transform:scale(0.3)}50%{opacity:1;transform:scale(1.05)}100%{transform:scale(1)}}
+@keyframes fadeInDown{0%{opacity:0;transform:translateY(-20px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes slideInBottom{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{box-shadow:0 0 5px rgba(99,102,241,0.5)}50%{box-shadow:0 0 20px rgba(99,102,241,0.8)}}
+@keyframes scaleHover{0%{transform:scale(1)}100%{transform:scale(1.05)}}
+@keyframes fadeInRight{0%{opacity:0;transform:translateX(-40px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes popIn{0%{opacity:0;transform:scale(0)}50%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+@keyframes slideAndFade{0%{opacity:0;transform:translateY(30px)}100%{opacity:1;transform:translateY(0)}}
+.anim-float{animation:float 3s ease-in-out infinite}
+.anim-slide{animation:slideIn .6s ease forwards}
+.anim-count{animation:countUp .4s ease}
+.anim-scale-in{animation:scaleIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards}
+.anim-slide-up{animation:slideInUp 0.5s ease forwards}
+.anim-slide-left{animation:slideInLeft 0.5s ease forwards}
+.anim-slide-right{animation:slideInRight 0.5s ease forwards}
+.anim-bounce-in{animation:bounceIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards}
+.anim-fade-in-down{animation:fadeInDown 0.5s ease forwards}
+.anim-slide-in-bottom{animation:slideInBottom 0.6s ease forwards}
+.anim-glow{animation:glow 2s ease-in-out infinite}
+.anim-pop-in{animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards}
+.anim-fade-in-right{animation:fadeInRight 0.6s ease forwards}
+.stat-card{transition:all .3s ease;animation:fadeInScale 0.5s ease forwards}
+.stat-card:hover{transform:translateY(-8px);box-shadow:0 12px 24px rgba(99,102,241,0.2)}
+.feature-btn{transition:all .3s ease;position:relative;overflow:hidden;animation:slideInLeft 0.6s ease forwards}
+.feature-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);transition:left .5s}
+.feature-btn:hover::before{left:100%}
+.feature-btn:hover{transform:translateX(4px)}
+.feature-btn.active-feat{border-color:rgba(168,85,247,0.8);background:linear-gradient(135deg,rgba(168,85,247,0.3),rgba(139,92,246,0.2));box-shadow:0 0 20px rgba(168,85,247,0.4),inset 0 0 20px rgba(168,85,247,0.1);animation:glow 1.5s ease-in-out infinite}
+.drop-zone{
+border:2px dashed rgba(168,85,247,0.5);
+};transition:all .3s;animation:slideInUp 0.6s ease forwards}
+.drop-zone.dragover{
+border-color:#8b5cf6;
+background:rgba(139,92,246,0.12);
+transform:scale(1.05);
+box-shadow:0 0 40px rgba(139,92,246,0.6);
+transition:all 0.25s ease;
+}
+.drop-zone{
+transition:all .25s ease;
+}
+
+.drop-zone:hover{
+box-shadow:0 0 30px rgba(168,85,247,0.45);
+}
+.chart-bar{transition:height .8s ease,background .3s;border-radius:6px 6px 0 0;animation:barGrow 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards}
+.chart-bar:hover{filter:brightness(1.2)}
+.toast{animation:slideIn .4s ease,fadeOut .4s ease 3.6s forwards}
+@keyframes fadeOut{to{opacity:0;transform:translateX(30px)}}
+.nav-link{position:relative;transition:all .3s;color:#9ca3af}.
+.nav-link.active-nav{
+color:#c084fc;
+text-shadow:0 0 10px rgba(168,85,247,0.8);
+}
+
+.nav-link.active-nav::after{
+width:100%;
+}
+.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:linear-gradient(90deg,#a855f7,#7c3aed);transition:width .3s}
+.nav-link:hover::after,.nav-link.active-nav::after{width:100%}
+.nav-link:hover{color:#c084fc}
+.bg-mesh{background:
+  radial-gradient(ellipse at 10% 20%,rgba(99,102,241,0.08) 0%,transparent 50%),
+  radial-gradient(ellipse at 80% 80%,rgba(139,92,246,0.06) 0%,transparent 50%),
+  radial-gradient(ellipse at 50% 50%,rgba(16,185,129,0.04) 0%,transparent 60%),
+  #0a0a0f}
+.pie-segment{transition:all .3s ease;animation:fadeInScale 0.6s ease forwards}
+.pie-segment:hover{filter:brightness(1.3);transform:scale(1.05)}
+input:focus,textarea:focus{outline:none;border-color:rgba(99,102,241,0.5);box-shadow:0 0 0 3px rgba(99,102,241,0.1);animation:glow 1.5s ease-in-out infinite}
+.shimmer-bg{background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0) 100%);background-size:200% 100%;animation:shimmer 2s infinite}
+.mobile-menu{transform:translateX(100%);transition:transform .3s ease}
+.mobile-menu.open{transform:translateX(0)}
+.emoji-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:14px}
+.trait-bar{height:8px;border-radius:4px;transition:width 1s ease;animation:scaleIn 0.5s ease forwards}
+.mood-dot{width:8px;height:8px;border-radius:50%;transition:all .3s;animation:popIn 0.4s ease forwards}
+</style>
+  <script>
+tailwind.config={theme:{extend:{fontFamily:{outfit:['Outfit','sans-serif']}}}}
+</script>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-mesh text-gray-200 font-outfit">
+  <div id="app-root" class="h-full w-full">
+   <!-- Toast Container -->
+   <div id="toast-container" class="fixed top-4 right-4 z-[100] flex flex-col gap-2"></div><!-- Mobile Menu Overlay -->
+   <div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-40 hidden" onclick="closeMobileMenu()"></div>
+   <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-72 z-50 glass-strong p-6 flex flex-col gap-4">
+    <button onclick="closeMobileMenu()" class="self-end p-2 text-gray-400 hover:text-white"><i data-lucide="x" style="width:24px;height:24px"></i></button>
+    <nav class="flex flex-col gap-3 mt-4">
+     <a onclick="showPage('home');closeMobileMenu()" class="mob-link px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer text-gray-300 hover:text-white transition flex items-center gap-3"><i data-lucide="home" style="width:18px;height:18px"></i> Home</a> <a onclick="showPage('dashboard');closeMobileMenu()" class="mob-link px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer text-gray-300 hover:text-white transition flex items-center gap-3"><i data-lucide="layout-dashboard" style="width:18px;height:18px"></i> Dashboard</a> <a onclick="showPage('analyzer');closeMobileMenu()" class="mob-link px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer text-gray-300 hover:text-white transition flex items-center gap-3"><i data-lucide="upload" style="width:18px;height:18px"></i> Analyzer</a> <a onclick="showPage('about');closeMobileMenu()" class="mob-link px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer text-gray-300 hover:text-white transition flex items-center gap-3"><i data-lucide="info" style="width:18px;height:18px"></i> About</a>
+     <hr class="border-white/10 my-2"><a onclick="showPage('signin');closeMobileMenu()" class="mob-link px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer text-gray-300 hover:text-white transition flex items-center gap-3"><i data-lucide="log-in" style="width:18px;height:18px"></i> Sign In</a> <a onclick="showPage('signup');closeMobileMenu()" class="mob-link px-4 py-3 rounded-xl grad-purple text-white text-center cursor-pointer transition flex items-center justify-center gap-2"><i data-lucide="user-plus" style="width:18px;height:18px"></i> Sign Up</a>
+    </nav>
+   </div><!-- NAVBAR -->
+   <header class="sticky top-0 z-30 glass-strong">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+     <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('home')">
+      <div class="w-9 h-9 rounded-xl grad-purple flex items-center justify-center">
+       <i data-lucide="message-circle" style="width:18px;height:18px;color:white"></i>
+      </div><span id="nav-title" class="text-lg font-bold bg-gradient-to-r from-purple-400 to-purple-400 bg-clip-text text-transparent">ChatAnalyzer</span>
+     </div>
+     <nav class="hidden md:flex items-center gap-6">
+      <a onclick="showPage('home')" class="nav-link cursor-pointer text-sm text-gray-400 hover:text-white" data-nav="home">Home</a>
+
+<a onclick="showPage('analyzer')" class="nav-link cursor-pointer text-sm text-gray-400 hover:text-white" data-nav="analyzer">Analyzer</a>
+
+<a onclick="showPage('dashboard')" class="nav-link cursor-pointer text-sm text-gray-400 hover:text-white" data-nav="dashboard">Dashboard</a>
+
+<a onclick="showPage('about')" class="nav-link cursor-pointer text-sm text-gray-400 hover:text-white" data-nav="about">About</a>
+<!-- SHOW THIS FIRST -->
+<div id="auth-buttons" class="flex items-center gap-3">
+  <button onclick="showPage('signin')" class="text-sm text-gray-400 px-4 py-2">Sign In</button>
+  <button onclick="showPage('signup')" class="text-sm grad-purple text-white px-5 py-2 rounded-xl">Sign Up</button>
+</div>
+
+<!-- HIDE THIS INITIALLY -->
+<div id="account-section" class="hidden items-center gap-3 relative">
+
+  <!-- Profile Button -->
+  <div onclick="toggleDropdown()" class="flex items-center gap-2 cursor-pointer">
+    <img id="user-avatar" src="https://ui-avatars.com/api/?name=User" 
+         class="w-8 h-8 rounded-full border border-white/20">
+
+    <span id="username-display" class="text-sm text-white"></span>
+  </div>
+
+  <!-- Dropdown -->
+  <div id="profile-dropdown" class="hidden absolute right-0 top-12 w-40 glass rounded-xl p-3 shadow-lg">
+    <button onclick="showPage('dashboard')" class="block w-full text-left px-3 py-2 hover:bg-white/10 rounded-lg">
+      Dashboard
+    </button>
+
+    <button onclick="logout()" class="block w-full text-left px-3 py-2 text-red-400 hover:bg-white/10 rounded-lg">
+      Logout
+    </button>
+  </div>
+
+</div>
+     <!-- Auth Buttons -->
+<!---<div id="auth-buttons" class="hidden md:flex items-center gap-3">
+  <button onclick="showPage('signin')" class="text-sm text-gray-400 hover:text-white transition px-4 py-2">Sign In</button>
+  <button onclick="showPage('signup')" class="text-sm grad-purple text-white px-5 py-2 rounded-xl hover:opacity-90 transition">Sign Up</button>
+</div>
+
+<!-- Account Section 
+<div id="account-section" class="hidden md:flex items-center gap-3">
+  <div class="flex items-center gap-2 text-white">
+    <i data-lucide="user-circle" style="width:22px;height:22px"></i>
+    <span id="username-display" class="text-sm"></span>
+  </div>
+  <button onclick="logout()" class="text-sm bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600">
+    Logout
+  </button>
+</div>-->
+
+<!-- Mobile Menu Button (KEEP THIS SAME) -->
+<button onclick="openMobileMenu()" class="md:hidden p-2 text-gray-400 hover:text-white">
+  <i data-lucide="menu" style="width:24px;height:24px"></i>
+</button>
+   </header><!-- HOME PAGE -->
+   <main id="page-home" class="page active">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
+     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs text-purple-300 mb-8">
+      <i data-lucide="shield-check" style="width:14px;height:14px"></i> <span>100% Private — All analysis runs locally in your browser</span>
+     </div>
+     <h1 id="hero-title" class="text-4xl sm:text-6xl lg:text-7xl font-black leading-tight mb-6 anim-slide-up" style="animation-delay:0.1s"><span class="bg-gradient-to-r from-white via-purple-200 to-purple-300 bg-clip-text text-transparent">Decode Your</span><br><span class="bg-gradient-to-r from-purple-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Conversations</span></h1>
+     <p id="hero-tagline" class="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed anim-slide-up" style="animation-delay:0.2s">AI-powered insights from your WhatsApp chats. Discover patterns, sentiments, and hidden dynamics — all without uploading a single byte.</p>
+     <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16 anim-slide-up" style="animation-delay:0.3s">
+      <button type="button" onclick="showPage('analyzer');lucide.createIcons();" class="grad-purple text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:opacity-90 transition flex items-center justify-center gap-2">
+<i data-lucide="zap" style="width:20px;height:20px"></i>
+Start Analyzing
+</button><button onclick="showPage('about')" class="glass text-gray-300 px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white/10 transition hover:shadow-lg duration-300"> Learn More </button>
+     </div>
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+      <div class="glass rounded-2xl p-6 text-left stat-card glow-purple anim-scale-in hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300" style="animation-delay:0.4s">
+       <div class="w-10 h-10 rounded-xl grad-purple flex items-center justify-center mb-4"><i data-lucide="bar-chart-3" style="width:20px;height:20px;color:white"></i>
+       </div>
+       <h3 class="font-bold text-white mb-1">Deep Analytics</h3>
+       <p class="text-gray-500 text-sm">Message counts, word stats, activity patterns &amp; more</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-left stat-card glow-emerald anim-scale-in hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300" style="animation-delay:0.5s">
+       <div class="w-10 h-10 rounded-xl grad-emerald flex items-center justify-center mb-4"><i data-lucide="brain" style="width:20px;height:20px;color:white"></i>
+       </div>
+       <h3 class="font-bold text-white mb-1">Sentiment AI</h3>
+       <p class="text-gray-500 text-sm">Understand mood trends and emotional dynamics</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-left stat-card glow-rose anim-scale-in hover:shadow-lg hover:shadow-rose-500/30 transition-all duration-300" style="animation-delay:0.6s">
+       <div class="w-10 h-10 rounded-xl grad-rose flex items-center justify-center mb-4"><i data-lucide="users" style="width:20px;height:20px;color:white"></i>
+       </div>
+       <h3 class="font-bold text-white mb-1">Relationship Maps</h3>
+       <p class="text-gray-500 text-sm">Discover connection strength between participants</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-left stat-card glow-amber anim-scale-in hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300" style="animation-delay:0.7s">
+       <div class="w-10 h-10 rounded-xl grad-amber flex items-center justify-center mb-4"><i data-lucide="lock" style="width:20px;height:20px;color:white"></i>
+       </div>
+       <h3 class="font-bold text-white mb-1">Fully Private</h3>
+       <p class="text-gray-500 text-sm">Zero data leaves your device — ever</p>
+      </div>
+     </div>
+    </section>
+   </main><!-- DASHBOARD PAGE -->
+   <main id="page-dashboard" class="page">
+  <div class="flex gap-0">
+     <!-- Sidebar -->
+     <aside class="hidden md:flex w-64 flex-col glass-strong border-r border-white/10 sticky top-[72px] h-[calc(100vh-72px)] overflow-y-auto">
+      <div class="p-5 border-b border-white/10 sticky top-0 bg-black/30 backdrop-blur">
+       <h3 class="text-white font-bold text-sm mb-4 flex items-center gap-2"><i data-lucide="layout-grid" style="width:16px;height:16px;color:#6366f1"></i> Analysis</h3><button id="download-report-btn" onclick="downloadReport()" class="hidden w-full glass px-4 py-2 rounded-lg text-xs text-purple-300 hover:bg-white/10 transition flex items-center justify-center gap-2 mb-4"> <i data-lucide="download" style="width:14px;height:14px"></i> Download Report </button>
+      </div>
+      <nav class="flex-1 p-3 space-y-2 overflow-y-auto" id="sidebar-nav" style="background:radial-gradient(circle at center, rgba(139,92,246,0.05) 0%, transparent 70%)"></nav>
+     </aside><!-- Main Content -->
+     <main class="flex-1 min-h-[calc(100vh-72px)]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 pb-24 w-full">
+       <div class="flex items-center justify-between mb-8">
+        <div>
+         <h2 class="text-2xl sm:text-3xl font-bold text-white">Dashboard</h2>
+         <p class="text-gray-500 mt-1">Your analysis results at a glance</p>
+        </div>
+       </div>
+       <div id="dashboard-empty" class="glass rounded-2xl p-12 text-center">
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-r from-purple-500 to-purple-700 flex items-center justify-center mx-auto mb-6 anim-float">
+         <i data-lucide="file-search" style="width:32px;height:32px;color:#6366f1"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">No Analysis Yet</h3>
+        <p class="text-gray-500 mb-6">Upload a WhatsApp chat export to see your insights here</p><button onclick="showPage('analyzer')" class="grad-purple text-white px-6 py-3 rounded-xl hover:opacity-90 transition">Go to Analyzer</button>
+       </div>
+       <div id="dashboard-content" class="hidden">
+        <!-- Stats Row -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="stats-grid"></div><!-- Main Content - Single Feature Visible -->
+        <div id="feature-content" class="space-y-6">
+         <div id="overview-section" class="feature-view hidden"></div>
+         <div id="charts-section" class="feature-view hidden"></div>
+         <div id="participants-section" class="feature-view hidden"></div>
+         <div id="emojis-section" class="feature-view hidden"></div>
+         <div id="sentiment-section" class="feature-view hidden"></div>
+         <div id="topics-section" class="feature-view hidden"></div>
+         <div id="toxicity-section" class="feature-view hidden"></div>
+         <div id="relationships-section" class="feature-view hidden"></div>
+         <div id="personality-section" class="feature-view hidden"></div>
+         <div id="addiction-section" class="feature-view hidden"></div>
+         <div id="initiators-section" class="feature-view hidden"></div>
+         <div id="highlights-section" class="feature-view hidden"></div>
+        </div>
+       </div>
+      </div>
+     </section>
+    </div>
+   </main><!-- ANALYZER PAGE -->
+   <main id="page-analyzer" class="page">
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+     <div class="text-center mb-10">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Upload &amp; Analyze</h2>
+      <p class="text-gray-500">Drop your WhatsApp chat export and get instant insights</p>
+     </div>
+     <div id="drop-zone" class="drop-zone rounded-2xl p-10 sm:p-16 text-center cursor-pointer glass anim-slide-up shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30 transition-all duration-300" style="animation-delay:0.1s">
+      <input type="file" id="file-input" class="hidden" accept=".txt,.zip,.csv,.pdf,.json,.docx" onchange="handleFile(this.files[0])">
+      <div class="w-16 h-16 rounded-2xl grad-purple flex items-center justify-center mx-auto mb-6 anim-float" style="animation-play-state:running">
+       <i data-lucide="upload-cloud" style="width:32px;height:32px;color:white"></i>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Drag &amp; Drop Your Chat File</h3>
+      <p class="text-gray-500 mb-4">or click to browse files</p>
+      <div class="flex flex-wrap justify-center gap-2">
+       <span class="px-3 py-1 rounded-lg glass text-xs text-gray-400 anim-slide-left" style="animation-delay:0.15s">.txt</span> <span class="px-3 py-1 rounded-lg glass text-xs text-gray-400 anim-slide-left" style="animation-delay:0.2s">.zip</span> <span class="px-3 py-1 rounded-lg glass text-xs text-gray-400 anim-slide-left" style="animation-delay:0.25s">.csv</span> <span class="px-3 py-1 rounded-lg glass text-xs text-gray-400 anim-slide-left" style="animation-delay:0.3s">.json</span> <span class="px-3 py-1 rounded-lg glass text-xs text-gray-400 anim-slide-left" style="animation-delay:0.35s">.pdf</span> <span class="px-3 py-1 rounded-lg glass text-xs text-gray-400 anim-slide-left" style="animation-delay:0.4s">.docx</span>
+      </div>
+     </div>
+     <div id="processing-bar" class="hidden mt-6 glass rounded-2xl p-6 anim-slide-up shadow-lg shadow-purple-500/10">
+      <div class="flex items-center gap-3 mb-3">
+       <div class="w-5 h-5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div><span class="text-white font-medium" id="process-status">Processing...</span>
+      </div>
+      <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+       <div id="process-progress" class="h-full grad-purple rounded-full transition-all duration-500" style="width:0%"></div>
+      </div>
+     </div>
+     <div class="mt-8 glass rounded-2xl p-6 anim-slide-up" style="animation-delay:0.2s">
+      <h4 class="text-white font-semibold mb-3 flex items-center gap-2"><i data-lucide="shield" style="width:18px;height:18px;color:#10b981"></i> Privacy Guarantee</h4>
+      <p class="text-gray-500 text-sm leading-relaxed">Your chat data never leaves your device. All parsing and analysis happens entirely in your browser using JavaScript. We have zero access to your conversations.</p>
+     </div>
+     <div class="mt-4 glass rounded-2xl p-6 anim-slide-up" style="animation-delay:0.3s">
+      <h4 class="text-white font-semibold mb-3 flex items-center gap-2"><i data-lucide="help-circle" style="width:18px;height:18px;color:#f59e0b"></i> How to Export WhatsApp Chats</h4>
+      <ol class="text-gray-500 text-sm space-y-2 list-decimal list-inside">
+       <li>Open the WhatsApp chat you want to analyze</li>
+       <li>Tap the three dots menu (⋮) → More → Export chat</li>
+       <li>Choose "Without media" for faster analysis</li>
+       <li>Save the .txt file and upload it here</li>
+      </ol>
+     </div>
+    </section>
+   </main><!-- ABOUT PAGE -->
+   <main id="page-about" class="page">
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+     <div class="text-center mb-12 anim-slide-up" style="animation-delay:0.1s">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">About ChatAnalyzer Pro</h2>
+      <p class="text-gray-500">Built for privacy-conscious users who love data</p>
+     </div>
+     <div class="grid gap-6 md:grid-cols-2">
+      <div class="glass rounded-justify2xl p-6 anim-scale-in hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300" style="animation-delay:0.2s">
+       <div class="w-10 h-10 rounded-xl grad-purple flex items-center justify-center mb-4"><i data-lucide="cpu" style="width:20px;height:20px;color:white"></i>
+       </div>
+       <h3 class="text-white font-bold text-lg mb-2">Client-Side Processing</h3>
+       <p class="text-gray-500 text-sm leading-relaxed">Every calculation, from word counts to sentiment analysis, runs entirely in your browser. No servers, no APIs, no data transmission.</p>
+      </div>
+      <div class="glass rounded-2xl p-6 anim-scale-in hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300" style="animation-delay:0.3s">
+       <div class="w-10 h-10 rounded-xl grad-emerald flex items-center justify-center mb-4"><i data-lucide="trending-up" style="width:20px;height:20px;color:white"></i>
+       </div>
+       <h3 class="text-white font-bold text-lg mb-2">Advanced Analytics</h3>
+       <p class="text-gray-500 text-sm leading-relaxed">Go beyond basic stats with sentiment analysis, toxicity detection, relationship mapping, personality insights, and conversation pattern analysis.</p>
+      </div>
+      <div class="glass rounded-2xl p-6 anim-scale-in hover:shadow-lg hover:shadow-rose-500/20 transition-all duration-300" style="animation-delay:0.4s">
+       <div class="w-10 h-10 rounded-xl grad-rose flex items-center justify-center mb-4"><i data-lucide="palette" style="width:20px;height:20px;color:white"></i>
+       </div>
+       <h3 class="text-white font-bold text-lg mb-2">Beautiful Visualizations</h3>
+       <p class="text-gray-500 text-sm leading-relaxed">Interactive charts, animated cards, and glassmorphism UI make data exploration a visual delight.</p>
+      </div>
+      <div class="glass rounded-2xl p-6 anim-scale-in hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300" style="animation-delay:0.5s">
+       <div class="w-10 h-10 rounded-xl grad-amber flex items-center justify-center mb-4"><i data-lucide="file-down" style="width:20px;height:20px;color:white"></i>
+       </div>
+       <h3 class="text-white font-bold text-lg mb-2">Export Reports</h3>
+       <p class="text-gray-500 text-sm leading-relaxed">Download comprehensive text reports of your analysis to share insights or keep records.</p>
+      </div>
+     </div>
+     <div class="mt-10 glass rounded-2xl p-8 text-center anim-slide-up" style="animation-delay:0.6s">
+      <h3 class="text-xl font-bold text-white mb-3">Supported Formats</h3>
+      <div class="flex flex-wrap justify-center gap-3">
+       <span class="px-4 py-2 rounded-xl glass text-sm text-purple-300">.txt (WhatsApp Export)</span> <span class="px-4 py-2 rounded-xl glass text-sm text-emerald-300">.zip (Compressed)</span> <span class="px-4 py-2 rounded-xl glass text-sm text-amber-300">.csv (Spreadsheet)</span> <span class="px-4 py-2 rounded-xl glass text-sm text-rose-300">.json (Structured)</span> <span class="px-4 py-2 rounded-xl glass text-sm text-purple-300">.pdf (Document)</span> <span class="px-4 py-2 rounded-xl glass text-sm text-cyan-300">.docx (Word)</span>
+      </div>
+     </div>
+    </section>
+   </main><!-- SIGN IN PAGE -->
+   <main id="page-signin" class="page">
+    <section class="max-w-md mx-auto px-4 sm:px-6 py-16">
+     <div class="glass-strong rounded-2xl p-8 glow-purple anim-scale-in shadow-lg shadow-purple-500/20">
+      <div class="text-center mb-8">
+       <div class="w-14 h-14 rounded-2xl grad-purple flex items-center justify-center mx-auto mb-4 anim-bounce">
+        <i data-lucide="log-in" style="width:24px;height:24px;color:white"></i>
+       </div>
+       <h2 class="text-2xl font-bold text-white">Welcome Back</h2>
+       <p class="text-gray-500 mt-1 text-sm">Sign in to access your saved analyses</p>
+      </div>
+      <form onsubmit="handleSignIn(event)" class="space-y-4">
+       <div>
+        <label for="si-email" class="block text-sm font-medium text-gray-400 mb-1.5">Email</label> <input type="email" id="si-email" placeholder="you@example.com" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:shadow-lg focus:shadow-purple-500/20 transition-all" required>
+       </div>
+       <div>
+        <label for="si-pass" class="block text-sm font-medium text-gray-400 mb-1.5">Password</label> <input type="password" id="si-pass" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:shadow-lg focus:shadow-purple-500/20 transition-all" required>
+       </div><button type="submit" class="w-full grad-purple text-white py-3 rounded-xl font-semibold hover:opacity-90 transition hover:shadow-lg hover:shadow-purple-500/40">Sign In</button>
+      </form>
+      <p class="text-center text-gray-500 text-sm mt-6">Don't have an account? <a onclick="showPage('signup')" class="text-purple-400 cursor-pointer hover:underline transition">Sign Up</a></p>
+      <p class="text-center text-gray-600 text-xs mt-4 italic">Demo only — no actual authentication</p>
+     </div>
+    </section>
+   </main><!-- SIGN UP PAGE -->
+   <main id="page-signup" class="page">
+    <section class="max-w-md mx-auto px-4 sm:px-6 py-16">
+     <div class="glass-strong rounded-2xl p-8 glow-purple anim-scale-in shadow-lg shadow-emerald-500/20">
+      <div class="text-center mb-8">
+       <div class="w-14 h-14 rounded-2xl grad-emerald flex items-center justify-center mx-auto mb-4 anim-bounce">
+        <i data-lucide="user-plus" style="width:24px;height:24px;color:white"></i>
+       </div>
+       <h2 class="text-2xl font-bold text-white">Create Account</h2>
+       <p class="text-gray-500 mt-1 text-sm">Join to save and track your analyses</p>
+      </div>
+      <form onsubmit="handleSignUp(event)" class="space-y-4">
+       <div>
+        <label for="su-name" class="block text-sm font-medium text-gray-400 mb-1.5">Full Name</label> <input type="text" id="su-name" placeholder="John Doe" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:shadow-lg focus:shadow-emerald-500/20 transition-all" required>
+       </div>
+       <div>
+        <label for="su-email" class="block text-sm font-medium text-gray-400 mb-1.5">Email</label> <input type="email" id="su-email" placeholder="you@example.com" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:shadow-lg focus:shadow-emerald-500/20 transition-all" required>
+       </div>
+       <div>
+        <label for="su-pass" class="block text-sm font-medium text-gray-400 mb-1.5">Password</label> <input type="password" id="su-pass" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm focus:shadow-lg focus:shadow-emerald-500/20 transition-all" required>
+       </div><button type="submit" class="w-full grad-emerald text-white py-3 rounded-xl font-semibold hover:opacity-90 transition hover:shadow-lg hover:shadow-emerald-500/40">Create Account</button>
+      </form>
+      <p class="text-center text-gray-500 text-sm mt-6">Already have an account? <a onclick="showPage('signin')" class="text-purple-400 cursor-pointer hover:underline transition">Sign In</a></p>
+      <p class="text-center text-gray-600 text-xs mt-4 italic">Demo only — no actual authentication</p>
+     </div>
+    </section>
+   </main><!-- Footer -->
+   <footer class="glass py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-600">
+     <span>© 2025 ChatAnalyzer Pro — All analysis runs locally</span>
+     <div class="flex items-center gap-4">
+      <a onclick="showPage('about')" class="hover:text-gray-400 cursor-pointer transition">About</a> <span>·</span> <span class="flex items-center gap-1"><i data-lucide="shield-check" style="width:14px;height:14px;color:#10b981"></i> Private by Design</span>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+// ========== GLOBAL STATE ==========
+let chatData=null, analysisResult=null, currentFeature='overview';
+const features=[
+  {id:'overview',label:'Overview',icon:'layout-dashboard'},
+  {id:'charts',label:'Charts',icon:'pie-chart'},
+  {id:'participants',label:'Participants',icon:'users'},
+  {id:'emojis',label:'Emojis',icon:'smile'},
+  {id:'sentiment',label:'Sentiment',icon:'heart'},
+  {id:'topics',label:'Topics',icon:'hash'},
+  {id:'toxicity',label:'Toxicity',icon:'alert-triangle'},
+  {id:'relationships',label:'Relationships',icon:'link'},
+  {id:'personality',label:'Personality',icon:'brain'},
+  {id:'addiction',label:'Addiction Score',icon:'activity'},
+  {id:'initiators',label:'Initiators',icon:'message-circle'},
+  {id:'highlights',label:'Highlights',icon:'star'}
+];
+
+// ========== NAVIGATION ==========
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById('page-'+id);
+  if(el)el.classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(n=>{
+    n.classList.toggle('active-nav',n.dataset.nav===id);
+    n.style.color=n.dataset.nav===id?'#fff':'';
+  });
+  document.getElementById('app-root').scrollTop=0;
+}
+function openMobileMenu(){document.getElementById('mobile-menu').classList.add('open');document.getElementById('mobile-overlay').classList.remove('hidden')}
+function closeMobileMenu(){document.getElementById('mobile-menu').classList.remove('open');document.getElementById('mobile-overlay').classList.add('hidden')}
+function handleSignIn(e){
+  e.preventDefault();
+
+  const email = document.getElementById("si-email").value;
+
+  showToast('Welcome back!','success');
+
+  loginSuccess(email); // 👈 key line
+}
+function handleSignUp(e){
+  e.preventDefault();
+
+  const name = document.getElementById("su-name").value;
+
+  showToast('Account created!','success');
+
+  loginSuccess(name); // 👈 key line
+}
+// ========== TOAST ==========
+function showToast(msg,type='info'){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  const colors={success:'border-emerald-500 bg-emerald-500/10',error:'border-rose-500 bg-rose-500/10',info:'border-purple-500 bg-purple-500/10'};
+  const icons={success:'check-circle',error:'alert-circle',info:'info'};
+  t.className=`toast glass px-5 py-3 rounded-xl border-l-4 ${colors[type]||colors.info} flex items-center gap-3 text-sm text-white max-w-sm`;
+  t.innerHTML=`<i data-lucide="${icons[type]||icons.info}" style="width:18px;height:18px;flex-shrink:0"></i><span>${msg}</span>`;
+  c.appendChild(t);
+  lucide.createIcons({nameAttr:'data-lucide'});
+  setTimeout(()=>t.remove(),4000);
+}
+
+// ========== FILE HANDLING ==========
+const dropZone=document.getElementById('drop-zone');
+const fileInput=document.getElementById('file-input');
+
+// Click to browse
+dropZone.addEventListener('click',()=>fileInput.click());
+
+// Drag and drop
+dropZone.addEventListener('dragover',e=>{e.preventDefault();e.stopPropagation();dropZone.classList.add('dragover')});
+dropZone.addEventListener('dragleave',e=>{e.preventDefault();e.stopPropagation();dropZone.classList.remove('dragover')});
+dropZone.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();dropZone.classList.remove('dragover');if(e.dataTransfer.files.length)handleFile(e.dataTransfer.files[0])});
+
+// File input change
+fileInput.addEventListener('change',e=>{if(e.target.files.length)handleFile(e.target.files[0])});
+
+async function handleFile(file){
+  if(!file)return;
+  const ext=file.name.split('.').pop().toLowerCase();
+  const supported=['txt','zip','csv','json','pdf','docx'];
+  if(!supported.includes(ext)){showToast('Unsupported file format','error');return}
+  showProcessing(true);
+  updateProgress(10,'Reading file...');
+  try{
+    let text='';
+    if(ext==='txt'){
+    text = await file.text();
+}
+
+else if(ext==='csv'){
+    const csv = await file.text();
+    const rows = csv.split('\n');
+    text = rows.map(r=>{
+        const c = r.split(',');
+        if(c.length >= 4){
+            return `${c[0]}, ${c[1]} - ${c[2]}: ${c.slice(3).join(',')}`;
+        }
+        return '';
+    }).join('\n');
+}
+
+else if(ext==='json'){
+    const data = JSON.parse(await file.text());
+    text = data.map(m =>
+        `${m.date || ''}, ${m.time || ''} - ${m.sender || 'User'}: ${m.message || ''}`
+    ).join('\n');
+}
+
+else if(ext==='zip'){
+    text = await readZip(file);
+}
+
+else if(ext==='pdf'){
+    text = await readPdfBasic(file);
+}
+
+else if(ext==='docx'){
+    text = await readDocx(file);
+}
+    updateProgress(40,'Parsing messages...');
+    await delay(300);
+    const messages=parseWhatsApp(text);
+    if(messages.length<2){showToast('Could not parse enough messages. Please check the file format.','error');showProcessing(false);return}
+    updateProgress(60,'Running analysis...');
+    await delay(300);
+    analysisResult=await analyzeChat(messages);
+    chatData=messages;
+    updateProgress(80,'Building visualizations...');
+    await delay(300);
+    renderDashboard();
+    updateProgress(100,'Complete!');
+    await delay(500);
+    showProcessing(false);
+    showToast(`Analyzed ${messages.length} messages successfully!`,'success');
+    showPage('dashboard');
+  }catch(err){console.error(err);showToast('Error processing file: '+err.message,'error');showProcessing(false)}
+}
+
+async function readZip(file){
+    const zip = await JSZip.loadAsync(file);
+    let text = "";
+
+    const files = Object.keys(zip.files);
+
+    for(const name of files){
+        if(name.endsWith(".txt")){
+            text = await zip.files[name].async("string");
+            break;
+        }
+    }
+
+    return text;
+}
+
+async function readPdfBasic(file){
+  const buf=await file.arrayBuffer();
+  const decoder=new TextDecoder('utf-8',{fatal:false});
+  const text=decoder.decode(buf);
+  // Extract readable text between stream markers
+  const parts=[];
+  const regex=/\(([^)]+)\)/g;
+  let m;
+  while((m=regex.exec(text))!==null){if(m[1].length>3)parts.push(m[1])}
+  return parts.join('\n')||text.replace(/[^\x20-\x7E\n]/g,' ');
+}
+
+async function readDocx(file){
+  const buf=await file.arrayBuffer();
+  const decoder=new TextDecoder('utf-8',{fatal:false});
+  const text=decoder.decode(buf);
+  // Extract text content from XML
+  const parts=[];
+  const regex=/<w:t[^>]*>([^<]+)<\/w:t>/g;
+  let m;
+  while((m=regex.exec(text))!==null)parts.push(m[1]);
+  return parts.join(' ')||text.replace(/<[^>]+>/g,' ').replace(/[^\x20-\x7E\n]/g,' ');
+}
+
+function showProcessing(show){
+  document.getElementById('processing-bar').classList.toggle('hidden',!show);
+  if(!show)document.getElementById('process-progress').style.width='0%';
+}
+function updateProgress(pct,status){
+  document.getElementById('process-progress').style.width=pct+'%';
+  document.getElementById('process-status').textContent=status;
+}
+function delay(ms){return new Promise(r=>setTimeout(r,ms))}
+
+// ========== WHATSAPP PARSER ==========
+function parseWhatsApp(text){
+  const messages=[];
+  const lines=text.split('\n');
+  // Multiple date formats
+  const patterns=[
+    /^(\d{1,2}\/\d{1,2}\/\d{2,4}),?\s+(\d{1,2}:\d{2}(?::\d{2})?(?:\s*[APap][Mm])?)\s*[-–—]\s*([^:]+):\s*([\s\S]*)/,
+    /^\[(\d{1,2}\/\d{1,2}\/\d{2,4}),?\s+(\d{1,2}:\d{2}(?::\d{2})?(?:\s*[APap][Mm])?)\]\s*([^:]+):\s*([\s\S]*)/,
+    /^(\d{4}-\d{2}-\d{2}),?\s+(\d{1,2}:\d{2}(?::\d{2})?)\s*[-–—]\s*([^:]+):\s*([\s\S]*)/,
+    /^(\d{1,2}\.\d{1,2}\.\d{2,4}),?\s+(\d{1,2}:\d{2}(?::\d{2})?)\s*[-–—]\s*([^:]+):\s*([\s\S]*)/
+  ];
+  for(const line of lines){
+    const trimmed=line.trim();
+    if(!trimmed)continue;
+    let matched=false;
+    for(const pat of patterns){
+      const m=trimmed.match(pat);
+      if(m){
+        messages.push({date:m[1].replace(/[\[\]]/g,''),time:m[2].trim(),sender:m[3].trim(),message:m[4].trim()});
+        matched=true;
+        break;
+      }
+    }
+    if(!matched&&messages.length>0){
+      messages[messages.length-1].message+=' '+trimmed;
+    }
+  }
+  return messages;
+}
+
+// ========== ANALYSIS ENGINE ==========
+async function getMLSentiment(messages) {
+  const response = await fetch("http://127.0.0.1:5000/predict", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages: messages
+    })
+  });
+
+  const data = await response.json();
+  return data.predictions;
+}
+
+async function getToxicity(messages) {
+  const res = await fetch("http://127.0.0.1:5001/predict_toxic", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ messages })
+  });
+
+  const data = await res.json();
+  return data.toxicity;
+}
+async function analyzeChat(msgs){
+  const participants={};
+  let totalWords=0,totalMedia=0,totalEmojis=0;
+  const emojiCount={};
+  const hourly=new Array(24).fill(0);
+  const emojiRegex=/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{200D}\u{20E3}]/gu;
+  const sentiments = [];
+  const convGaps=[];
+  
+
+  // Positive/negative word lists
+  
+ 
+  const toxicWords=new Set(['stupid','idiot','dumb','shut up','hate you','loser','moron','pathetic','worthless','trash','garbage']);
+  const spamPatterns=[/(.)\1{5,}/,/^.{0,3}$/,/(https?:\/\/\S+)/];
+
+  let prevTime=null;
+  msgs.forEach((m,i)=>{
+    const s=m.sender;
+    if(!participants[s])participants[s]={messages:0,words:0,media:0,emojis:0,sentimentSum:0,initiated:0,responseTimes:[],hours:new Array(24).fill(0),toxicCount:0,spamCount:0,msgLengths:[]};
+    const p=participants[s];
+    p.messages++;
+    const isMedia=/(<Media omitted>|<image omitted>|<video omitted>|<audio omitted>|<sticker omitted>|<GIF omitted>|\u200e?image|video|audio|sticker)/i.test(m.message);
+    if(isMedia){p.media++;totalMedia++;return}
+    const words=m.message.split(/\s+/).filter(w=>w.length>0);
+    const wc=words.length;
+    p.words+=wc;
+    totalWords+=wc;
+    p.msgLengths.push(wc);
+    const emojis=m.message.match(emojiRegex)||[];
+    p.emojis+=emojis.length;
+    totalEmojis+=emojis.length;
+    emojis.forEach(e=>{emojiCount[e]=(emojiCount[e]||0)+1});
+    // Hour
+    const hm=m.time.match(/(\d{1,2}):(\d{2})/);
+    if(hm){
+      let h=parseInt(hm[1]);
+      if(/[Pp][Mm]/.test(m.time)&&h<12)h+=12;
+      if(/[Aa][Mm]/.test(m.time)&&h===12)h=0;
+      hourly[h]++;
+      p.hours[h]++;
+    }
+    const hour = hm ? (
+  (() => {
+    let h = parseInt(hm[1]);
+    if (/[Pp][Mm]/.test(m.time) && h < 12) h += 12;
+    if (/[Aa][Mm]/.test(m.time) && h === 12) h = 0;
+    return h;
+  })()
+) : 0;
+
+if (hour >= 0 && hour <= 5) {
+  p.nightMessages = (p.nightMessages || 0) + 1;
+}
+    // Sentiment
+    
+   
+    // Toxicity
+    // Spam
+    if(spamPatterns.some(p=>p.test(m.message))&&wc<3)p.spamCount++;
+    // Conversation initiator (gap > 4 hours)
+    if(prevTime&&i>0){
+      const gap=i-0; // simplified
+      if(i>0&&msgs[i-1].sender!==s){
+        // check time gap
+      }
+    }
+    prevTime=m.time;
+  });
+
+  // Conversation initiators - detect gaps
+  let lastMsgIdx=0;
+  for(let i=1;i<msgs.length;i++){
+    // Simple: if sender changes after 5+ messages by someone else, count as initiation
+    if(msgs[i].sender!==msgs[i-1].sender){
+      participants[msgs[i].sender].initiated++;
+    }
+  }
+
+  // Topics
+  const topicKeywords={
+    'Work/Business':['meeting','work','office','project','deadline','client','boss','salary','email','schedule'],
+    'Food & Dining':['food','eat','lunch','dinner','breakfast','restaurant','pizza','coffee','hungry','cook'],
+    'Travel':['travel','trip','flight','hotel','vacation','beach','airport','train','drive','visit'],
+    'Entertainment':['movie','game','music','show','watch','play','song','concert','netflix','youtube'],
+    'Relationships':['love','miss','date','together','heart','care','feel','hug','kiss','relationship'],
+    'Health':['health','gym','exercise','doctor','sick','medicine','sleep','tired','workout','diet'],
+    'Technology':['phone','app','update','download','computer','website','software','code','tech','internet'],
+    'Education':['study','exam','school','class','homework','book','learn','teacher','college','university']
+  };
+  const topicScores={};
+  const  allText=msgs.map(m=>m.message.toLowerCase()).join(' ');
+  for(const[topic,keywords]of Object.entries(topicKeywords)){
+    topicScores[topic]=keywords.reduce((sum,k)=>{
+      const regex=new RegExp('\\b'+k+'\\b','gi');
+      return sum+(allText.match(regex)||[]).length;
+    },0);
+  }
+
+  // Date range
+    
+  const dates = msgs.map(m => m.date).filter(Boolean);
+
+  const dateRange = {
+  start: dates[0] || 'N/A',
+  end: dates[dates.length - 1] || 'N/A',
+  days: msgs.length   // ✅ ADD THIS LINE
+  };
+
+  // Most active
+  let mostActive='';
+  let maxMsgs=0;
+  for(const[name,data]of Object.entries(participants)){
+    if(data.messages>maxMsgs){maxMsgs=data.messages;mostActive=name}
+  }
+
+  // Emoji ranking
+  const emojiRank=Object.entries(emojiCount).sort((a,b)=>b[1]-a[1]).slice(0,20);
+
+  // Relationship strength
+  const relationships=[];
+  const names=Object.keys(participants);
+  for(let i=0;i<names.length;i++){
+    for(let j=i+1;j<names.length;j++){
+      let interactions=0;
+      for(let k=1;k<msgs.length;k++){
+        if((msgs[k].sender===names[i]&&msgs[k-1].sender===names[j])||(msgs[k].sender===names[j]&&msgs[k-1].sender===names[i]))interactions++;
+      }
+      relationships.push({a:names[i],b:names[j],strength:interactions});
+    }
+  }
+  relationships.sort((a,b)=>b.strength-a.strength);
+
+  // Personality traits
+  const personalities={};
+  for(const[name,data]of Object.entries(participants)){
+    const avgLen=data.msgLengths.length?data.msgLengths.reduce((a,b)=>a+b,0)/data.msgLengths.length:0;
+    const emojiRate=data.messages?data.emojis/data.messages:0;
+    const nightOwl=data.hours.slice(22,24).reduce((a,b)=>a+b,0)+data.hours.slice(0,5).reduce((a,b)=>a+b,0);
+    const earlyBird=data.hours.slice(5,10).reduce((a,b)=>a+b,0);
+    const verbosity=Math.min(avgLen/15*100,100);
+    const expressiveness=Math.min(emojiRate*100,100);
+    const sociability=Math.min(data.initiated/(data.messages||1)*200,100);
+    const nightScore=Math.min(nightOwl/(data.messages||1)*300,100);
+    personalities[name]={verbosity:Math.round(verbosity),expressiveness:Math.round(expressiveness),sociability:Math.round(sociability),nightOwl:Math.round(nightScore),avgLen:Math.round(avgLen*10)/10};
+  }
+
+  // Addiction score
+  const addictionScores={};
+  for(const[name,data]of Object.entries(participants)){
+    const hourSpread=data.hours.filter(h=>h>0).length;
+    const msgRate=data.messages/Math.max(msgs.length,1)*100;
+    const score=Math.min(Math.round((hourSpread/24*40)+(msgRate*0.6)),100);
+    addictionScores[name]=score;
+  }
+
+  // Memory highlights
+  const highlights=[];
+  const longMsgs=[...msgs].filter(m=>m.message.split(/\s+/).length>20).sort((a,b)=>b.message.length-a.message.length).slice(0,3);
+  longMsgs.forEach(m=>highlights.push({type:'Long Message',sender:m.sender,preview:m.message.substring(0,100)+'...',date:m.date}));
+  const emojiMsgs=[...msgs].sort((a,b)=>(b.message.match(emojiRegex)||[]).length-(a.message.match(emojiRegex)||[]).length).slice(0,2);
+  emojiMsgs.forEach(m=>highlights.push({type:'Emoji Explosion',sender:m.sender,preview:m.message.substring(0,80),date:m.date}));
+  
+
+
+
+  // ===== ML SENTIMENT =====
+  const allMessages = msgs.map(m => m.message);
+
+  const predictions = await getMLSentiment(allMessages);
+
+  predictions.forEach((p, i) => {
+  sentiments.push({
+    index: i,
+    sender: msgs[i].sender,
+    score: p === 1 ? 1 : -1
+  });
+});
+
+
+// ===== ML TOXICITY =====
+  const tox = await getToxicity(allMessages);
+
+  tox.forEach((t, i) => {
+  if (t === 1) {
+    const sender = msgs[i].sender;
+    participants[sender].toxicCount =
+      (participants[sender].toxicCount || 0) + 1;
+  }
+});
+
+
+// ===== ADDICTION SCORE =====
+ Object.values(participants).forEach(p => {
+  const msgScore = p.messages / 50;
+  const nightScore = (p.nightMessages || 0) / 20;
+
+  const score = (msgScore + nightScore) / 2;
+
+  if (score > 5) p.addiction = "High";
+  else if (score > 2) p.addiction = "Medium";
+  else p.addiction = "Low";
+});
+
+
+// ===== PERSONALITY =====
+ Object.values(participants).forEach(p => {
+  if (p.messages > 100 && (p.emojis || 0) > 20) {
+    p.personality = "Extrovert";
+  } else if (p.messages < 50) {
+    p.personality = "Introvert";
+  } else {
+    p.personality = "Ambivert";
+  }
+});
+ 
+
+return {
+  totalMessages: msgs.length,
+  totalWords,
+  totalMedia,
+  totalEmojis,
+  participants,
+  dateRange,
+  mostActive,
+  emojiRank,
+  hourly,
+  topicScores,
+  sentiments,   // ML result
+  relationships,
+  personalities,
+  addictionScores,
+  highlights
+};
+}
+
+// ========== DASHBOARD RENDERING ==========
+function renderDashboard(){
+  if(!analysisResult)return;
+  const r=analysisResult;
+  document.getElementById('dashboard-empty').classList.add('hidden');
+  document.getElementById('dashboard-content').classList.remove('hidden');
+  document.getElementById('download-report-btn').classList.remove('hidden');
+  document.getElementById('download-report-btn').style.display='flex';
+
+  // Stats
+  const statsGrid=document.getElementById('stats-grid');
+  const stats=[
+    {label:'Total Messages',value:r.totalMessages.toLocaleString(),icon:'message-circle',grad:'grad-purple',glow:'glow-purple'},
+    {label:'Participants',value:Object.keys(r.participants).length,icon:'users',grad:'grad-emerald',glow:'glow-emerald'},
+    {label:'Total Words',value:r.totalWords.toLocaleString(),icon:'type',grad:'grad-rose',glow:'glow-rose'},
+    {label:'Media Shared',value:r.totalMedia.toLocaleString(),icon:'image',grad:'grad-amber',glow:'glow-amber'}
+  ];
+  statsGrid.innerHTML=stats.map((s,i)=>`
+    <div class="glass rounded-2xl p-5 stat-card ${s.glow} anim-slide" style="animation-delay:${i*100}ms;box-shadow:0 8px 32px ${s.grad===`grad-purple`?`rgba(99,102,241,0.15)`:s.grad===`grad-emerald`?`rgba(16,185,129,0.15)`:s.grad===`grad-rose`?`rgba(244,63,94,0.15)`:`rgba(245,158,11,0.15)`}">
+      <div class="flex items-center justify-between mb-3">
+        <div class="w-10 h-10 rounded-xl ${s.grad} flex items-center justify-center hover:scale-110 transition-transform duration-300"><i data-lucide="${s.icon}" style="width:18px;height:18px;color:white"></i></div>
+        <span class="text-gray-600 text-xs">${s.label}</span>
+      </div>
+      <div class="text-2xl font-black text-white anim-count">${s.value}</div>
+    </div>
+  `).join('');
+
+  // Render sidebar navigation
+  const sidebarNav=document.getElementById('sidebar-nav');
+  sidebarNav.innerHTML=features.map((f,i)=>`
+    <button onclick="selectFeature('${f.id}')" class="sidebar-nav-btn ${i===0?'active-feat':''} w-full text-left px-4 py-3 rounded-lg text-sm text-gray-300 hover:text-white transition flex items-center gap-3 border border-purple-500/30 hover:border-purple-500/60 bg-gradient-to-r from-purple-600/10 to-violet-600/10 hover:from-purple-600/20 hover:to-violet-600/20 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30 hover:scale-105 anim-slide-left" style="animation-delay:${i*50}ms">
+      <i data-lucide="${f.icon}" style="width:16px;height:16px;flex-shrink:0"></i>
+      <span>${f.label}</span>
+    </button>
+  `).join('');
+
+  // Render all sections
+  document.getElementById('overview-section').innerHTML=renderOverview(r);
+  document.getElementById('charts-section').innerHTML=renderCharts(r);
+  document.getElementById('participants-section').innerHTML=renderParticipants(r);
+  document.getElementById('emojis-section').innerHTML=renderEmojis(r);
+  document.getElementById('sentiment-section').innerHTML=renderSentiment(r);
+  document.getElementById('topics-section').innerHTML=renderMostUsedWords(r);
+  document.getElementById('toxicity-section').innerHTML=renderToxicity(r);
+  document.getElementById('relationships-section').innerHTML=renderRelationships(r);
+  document.getElementById('personality-section').innerHTML=renderPersonality(r);
+  document.getElementById('addiction-section').innerHTML=renderAddiction(r);
+  document.getElementById('initiators-section').innerHTML=renderInitiators(r);
+  document.getElementById('highlights-section').innerHTML=renderHighlights(r);
+
+  // Show first feature
+  selectFeature('overview');
+  lucide.createIcons({nameAttr:'data-lucide'});
+}
+
+function selectFeature(id){
+  currentFeature=id;
+  // Hide all sections
+  document.querySelectorAll('.feature-view').forEach(el=>el.classList.add('hidden'));
+  // Hide stats grid for non-overview features
+  if(id!=='overview'){
+    document.getElementById('stats-grid').classList.add('hidden');
+  }else{
+    document.getElementById('stats-grid').classList.remove('hidden');
+  }
+  // Show selected section
+  const mapId={'overview':'overview-section','charts':'charts-section','participants':'participants-section','emojis':'emojis-section','sentiment':'sentiment-section','topics':'topics-section','toxicity':'toxicity-section','relationships':'relationships-section','personality':'personality-section','addiction':'addiction-section','initiators':'initiators-section','highlights':'highlights-section'};
+  const el=document.getElementById(mapId[id]);
+  if(el)el.classList.remove('hidden');
+  // Update button active state
+  document.querySelectorAll('.sidebar-nav-btn').forEach(b=>b.classList.remove('active-feat'));
+  document.querySelector(`[onclick="selectFeature('${id}')"]`)?.classList.add('active-feat');
+}
+
+function renderFeature(id){
+  // No-op - handled by selectFeature
+}
+
+function renderOverview(r){
+  const pNames=Object.keys(r.participants);
+  return `
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-white font-bold mb-4 flex items-center gap-2"><i data-lucide="info" style="width:18px;height:18px;color:#6366f1"></i> Summary</h3>
+        <div class="space-y-3 text-sm">
+          <div class="flex justify-between"><span class="text-gray-500">Date Range</span><span class="text-white">${r.dateRange.start} → ${r.dateRange.end}</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Most Active</span><span class="text-purple-400 font-medium">${r.mostActive}</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Participants</span><span class="text-white">${pNames.length}</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Total Emojis</span><span class="text-white">${r.totalEmojis.toLocaleString()}</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Avg Words/Msg</span><span class="text-white">${r.totalMessages?(r.totalWords/r.totalMessages).toFixed(1):'0'}</span></div>
+        </div>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-white font-bold mb-4 flex items-center gap-2"><i data-lucide="trophy" style="width:18px;height:18px;color:#f59e0b"></i> Leaderboard</h3>
+        <div class="space-y-3">
+          ${Object.entries(r.participants).sort((a,b)=>b[1].messages-a[1].messages).slice(0,5).map(([name,d],i)=>{
+            const pct=Math.round(d.messages/r.totalMessages*100);
+            const colors=['from-purple-500 to-purple-500','from-emerald-500 to-cyan-500','from-rose-500 to-pink-500','from-amber-500 to-orange-500','from-violet-500 to-fuchsia-500'];
+            return `<div>
+              <div class="flex justify-between text-sm mb-1"><span class="text-gray-300">${i===0?'👑 ':''}${name}</span><span class="text-gray-500">${d.messages} msgs (${pct}%)</span></div>
+              <div class="h-2 bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r ${colors[i%5]} rounded-full" style="width:${pct}%"></div></div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderCharts(r){
+  const maxH=Math.max(...r.hourly);
+  const pEntries=Object.entries(r.participants).sort((a,b)=>b[1].messages-a[1].messages);
+  const lavenderColors=['#c084fc','#a78bfa','#d8b4fe','#e9d5ff','#f3e8ff','#ede9fe','#ddd6fe','#cffafe'];
+  // Build pie data
+  let cumAngle=0;
+  const pieSegments=pEntries.slice(0,8).map(([name,d],i)=>{
+    const pct=d.messages/r.totalMessages;
+    const angle=pct*360;
+    const start=cumAngle;
+    cumAngle+=angle;
+    return{name,pct,color:lavenderColors[i%lavenderColors.length],start,angle};
+  });
+  // Word pie
+  let cumAngle2 = 0;
+ const wordPie = pEntries.slice(0,8).map(([name,d],i)=>{
+const pct = d.words / r.totalWords;
+const angle = pct * 360;
+const start = cumAngle2;
+
+cumAngle2 += angle;
+
+return {
+name,
+pct,
+angle,
+start,
+color: lavenderColors[i % lavenderColors.length]
+};
+});
+
+  return `
+    <div class="grid grid-cols-2 gap-6 items-center">
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-white font-bold mb-4 flex items-center gap-2"><i data-lucide="pie-chart" style="width:18px;height:18px;color:#6366f1"></i> Message Distribution</h3>
+        <div class="flex justify-center mb-4">
+          <svg class="pie-chart" viewBox="0 0 200 200" width="180" height="180">
+
+${pieSegments.map((s,idx)=>{
+const r=90;
+
+const startAngle=(s.start-90)*Math.PI/180;
+const endAngle=((s.start+s.angle)-90)*Math.PI/180;
+
+const x1=100+r*Math.cos(startAngle);
+const y1=100+r*Math.sin(startAngle);
+
+const x2=100+r*Math.cos(endAngle);
+const y2=100+r*Math.sin(endAngle);
+
+const largeArc=s.angle>180?1:0;
+
+return `<path class="pie-segment"
+style="animation:pieReveal 0.8s cubic-bezier(0.34,1.56,0.64,1) ${idx*80}ms forwards;opacity:0;transform-origin:100px 100px"
+d="M100,100 L${x1},${y1} A${r},${r} 0 ${largeArc},1 ${x2},${y2} Z"
+fill="${s.color}" opacity="0.85"/>`;
+
+}).join('')}
+
+<circle cx="100" cy="100" r="40" fill="#0a0a0f"/>
+
+<text x="100" y="96" text-anchor="middle"
+fill="white" font-size="14" font-weight="bold">
+${r.totalMessages.toLocaleString()}
+</text>
+
+<text x="100" y="112" text-anchor="middle"
+fill="#9ca3af" font-size="8">
+messages
+</text>
+
+</svg>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-center">
+          ${pieSegments.map(s=>`<span class="text-xs flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full" style="background:${s.color}"></span>${s.name} (${Math.round(s.pct*100)}%)</span>`).join('')}
+        </div>
+      </div>
+      <div class="glass rounded-2xl p-6">
+<h3 class="text-white font-bold mb-4 flex items-center gap-2">
+<i data-lucide="type" style="width:18px;height:18px;color:#10b981"></i>
+Word Distribution
+</h3>
+
+<div class="flex justify-center mb-4">
+
+<svg class="pie-chart" viewBox="0 0 200 200" width="180" height="180">
+
+${wordPie.map((s,idx)=>{
+const r=90;
+
+const startAngle=(s.start-90)*Math.PI/180;
+const endAngle=((s.start+s.angle)-90)*Math.PI/180;
+
+const x1=100+r*Math.cos(startAngle);
+const y1=100+r*Math.sin(startAngle);
+
+const x2=100+r*Math.cos(endAngle);
+const y2=100+r*Math.sin(endAngle);
+
+const largeArc=s.angle>180?1:0;
+
+return `<path class="pie-segment"
+style="animation:pieReveal 0.8s cubic-bezier(0.34,1.56,0.64,1) ${idx*80}ms forwards;opacity:0;transform-origin:100px 100px"
+d="M100,100 L${x1},${y1} A${r},${r} 0 ${largeArc},1 ${x2},${y2} Z"
+fill="${s.color}" opacity="0.85"/>`;
+
+}).join('')}
+
+<circle cx="100" cy="100" r="40" fill="#0a0a0f"/>
+
+<text x="100" y="96" text-anchor="middle" fill="white"
+font-size="14" font-weight="bold">
+${r.totalWords.toLocaleString()}
+</text>
+
+<text x="100" y="112" text-anchor="middle"
+fill="#9ca3af" font-size="8">
+words
+</text>
+
+</svg>
+
+</div>
+
+<div class="flex flex-wrap justify-center gap-2 text-xs text-gray-400">
+${wordPie.map(p=>`
+<span class="flex items-center gap-1">
+<span class="w-2.5 h-2.5 rounded-full" style="background:${p.color}"></span>
+${p.name} (${Math.round(p.pct*100)}%)
+</span>
+`).join('')}
+</div>
+
+</div>
+<div class="glass rounded-2xl p-6 mt-6 md:col-span-2">
+
+<h3 class="text-white font-bold mb-6 flex items-center gap-2">
+<i data-lucide="clock"></i> Hourly Activity
+</h3>
+
+<div class="hourly-chart flex items-end justify-center gap-3 h-44">
+
+${r.hourly.map((v,i)=>{
+
+const max=Math.max(...r.hourly)||1
+const height=(v/max)*140
+
+return `
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+
+<div style="
+width:16px;
+height:${height}px;
+background:linear-gradient(180deg,#c084fc,#7c3aed);
+border-radius:6px;">
+</div>
+
+<span style="font-size:13px;color:#9aa7c7;font-weight:500;margin-top:6px;white-space:nowrap">
+${(i%12===0?12:i%12)} ${i<12?"AM":"PM"}
+</span>
+
+</div>
+`
+
+}).join("")}
+
+</div>
+
+</div>
+    </div>`;
+}
+
+function renderParticipants(r){
+  const entries=Object.entries(r.participants).sort((a,b)=>b[1].messages-a[1].messages);
+  return `<div class="glass rounded-2xl overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead><tr class="border-b border-white/10">
+          <th class="text-left px-5 py-4 text-gray-400 font-medium">Participant</th>
+          <th class="text-right px-5 py-4 text-gray-400 font-medium">Messages</th>
+          <th class="text-right px-5 py-4 text-gray-400 font-medium hidden sm:table-cell">Words</th>
+          <th class="text-right px-5 py-4 text-gray-400 font-medium hidden md:table-cell">Media</th>
+          <th class="text-right px-5 py-4 text-gray-400 font-medium hidden md:table-cell">Emojis</th>
+          <th class="text-right px-5 py-4 text-gray-400 font-medium hidden lg:table-cell">Avg Length</th>
+        </tr></thead>
+        <tbody>${entries.map(([name,d])=>{
+          const avgLen=d.msgLengths.length?(d.msgLengths.reduce((a,b)=>a+b,0)/d.msgLengths.length).toFixed(1):'0';
+          return `<tr class="border-b border-white/5 hover:bg-white/5 transition">
+            <td class="px-5 py-3 text-white font-medium">${name}</td>
+            <td class="px-5 py-3 text-right text-purple-400">${d.messages.toLocaleString()}</td>
+            <td class="px-5 py-3 text-right text-gray-400 hidden sm:table-cell">${d.words.toLocaleString()}</td>
+            <td class="px-5 py-3 text-right text-gray-400 hidden md:table-cell">${d.media}</td>
+            <td class="px-5 py-3 text-right text-gray-400 hidden md:table-cell">${d.emojis}</td>
+            <td class="px-5 py-3 text-right text-gray-400 hidden lg:table-cell">${avgLen} words</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderEmojis(r){
+  if(!r.emojiRank.length)return '<div class="glass rounded-2xl p-8 text-center text-gray-500">No emojis found in this chat</div>';
+  return `<div class="glass rounded-2xl p-6">
+    <h3 class="text-white font-bold mb-6 flex items-center gap-2"><i data-lucide="smile" style="width:18px;height:18px;color:#f59e0b"></i> Top Emojis</h3>
+    <div class="flex flex-wrap gap-3">
+      ${r.emojiRank.map(([emoji,count])=>`
+        <div class="emoji-badge glass hover:bg-white/10 transition cursor-default">
+          <span class="text-xl">${emoji}</span>
+          <span class="text-gray-400 text-sm font-medium">×${count}</span>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function renderSentiment(r){
+  const pEntries=Object.entries(r.participants);
+  // Mood buckets
+  let pos=0,neu=0,neg=0;
+  r.sentiments.forEach(s=>{if(s.score>0.05)pos++;else if(s.score<-0.05)neg++;else neu++});
+  const total=r.sentiments.length||1;
+  // Timeline (sample every N)
+  const step=Math.max(1,Math.floor(r.sentiments.length/50));
+  const timeline=r.sentiments.filter((_,i)=>i%step===0);
+  const maxAbs=Math.max(...timeline.map(t=>Math.abs(t.score)),0.1);
+
+  return `
+    <div class="grid md:grid-cols-3 gap-4 mb-6">
+      <div class="glass rounded-2xl p-5 text-center glow-emerald">
+        <div class="text-3xl mb-1">😊</div>
+        <div class="text-2xl font-black text-emerald-400">${Math.round(pos/total*100)}%</div>
+        <div class="text-gray-500 text-sm">Positive</div>
+      </div>
+      <div class="glass rounded-2xl p-5 text-center">
+        <div class="text-3xl mb-1">😐</div>
+        <div class="text-2xl font-black text-gray-300">${Math.round(neu/total*100)}%</div>
+        <div class="text-gray-500 text-sm">Neutral</div>
+      </div>
+      <div class="glass rounded-2xl p-5 text-center glow-rose">
+        <div class="text-3xl mb-1">😔</div>
+        <div class="text-2xl font-black text-rose-400">${Math.round(neg/total*100)}%</div>
+        <div class="text-gray-500 text-sm">Negative</div>
+      </div>
+    </div>
+    <div class="glass rounded-2xl p-6">
+      <h3 class="text-white font-bold mb-4 flex items-center gap-2"><i data-lucide="trending-up" style="width:18px;height:18px;color:#8b5cf6"></i> Mood Timeline</h3>
+      <div class="h-32 flex items-center relative">
+        <div class="absolute left-0 right-0 top-1/2 border-t border-white/10"></div>
+        <div class="flex items-center w-full h-full gap-px">
+          ${timeline.map(t=>{
+            const normalized=t.score/maxAbs;
+            const color=normalized>0.05?'bg-emerald-400':normalized<-0.05?'bg-rose-400':'bg-gray-500';
+            const h=Math.abs(normalized)*50;
+            const bottom=normalized>=0?'bottom-1/2':'top-1/2';
+            return `<div class="flex-1 relative h-full"><div class="absolute left-0 right-0 mood-dot ${color}" style="height:${Math.max(h,3)}%;${normalized>=0?'bottom:50%':'top:50%'};border-radius:2px"></div></div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div class="flex justify-between text-xs text-gray-600 mt-2"><span>Start</span><span>End</span></div>
+    </div>
+    <div class="glass rounded-2xl p-6">
+      <h3 class="text-white font-bold mb-4">Participant Sentiment</h3>
+      <div class="space-y-3">
+        ${pEntries.map(([name,d])=>{
+          const avg=d.messages?d.sentimentSum/d.messages:0;
+          const emoji=avg>0.03?'😊':avg<-0.03?'😔':'😐';
+          const color=avg>0.03?'text-emerald-400':avg<-0.03?'text-rose-400':'text-gray-400';
+          return `<div class="flex items-center justify-between"><span class="text-gray-300">${name}</span><span class="${color} font-medium">${emoji} ${avg>0?'+':''}${avg.toFixed(3)}</span></div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+function renderTopics(r){
+  const sorted=Object.entries(r.topicScores).sort((a,b)=>b[1]-a[1]).filter(([,v])=>v>0);
+  const maxScore=sorted.length?sorted[0][1]:1;
+  const topicIcons={'Work/Business':'💼','Food & Dining':'🍕','Travel':'✈️','Entertainment':'🎬','Relationships':'❤️','Health':'💪','Technology':'💻','Education':'📚'};
+  if(!sorted.length)return '<div class="glass rounded-2xl p-8 text-center text-gray-500">Not enough data to detect topics</div>';
+  return `<div class="glass rounded-2xl p-6">
+    <h3 class="text-white font-bold mb-6 flex items-center gap-2"><i data-lucide="hash" style="width:18px;height:18px;color:#8b5cf6"></i> Detected Topics</h3>
+    <div class="space-y-4">
+      ${sorted.map(([topic,score])=>{
+        const pct=Math.round(score/maxScore*100);
+        return `<div>
+          <div class="flex items-center justify-between mb-1"><span class="text-gray-300">${topicIcons[topic]||'📌'} ${topic}</span><span class="text-gray-500 text-sm">${score} mentions</span></div>
+          <div class="h-3 bg-white/5 rounded-full overflow-hidden"><div class="h-full grad-purple rounded-full transition-all" style="width:${pct}%"></div></div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;}
+
+function renderMostUsedWords(r){
+  // Extract words from all messages
+  const msgs=chatData||[];
+  const stopwords=new Set(['the','a','an','and','or','but','in','on','at','to','for','of','with','by','from','is','am','are','was','were','be','been','being','have','has','had','do','does','did','will','would','could','should','may','might','must','can','this','that','these','those','i','you','he','she','it','we','they','what','which','who','when','where','why','how','all','each','every','both','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very']);
+  
+  const wordFreq={};
+  msgs.forEach(m=>{
+    const words=m.message.toLowerCase().match(/\b[a-z]{3,}\b/g)||[];
+    words.forEach(w=>{
+      if(!stopwords.has(w)){
+        wordFreq[w]=(wordFreq[w]||0)+1;
+      }
+    });
+  });
+  
+  const sorted=Object.entries(wordFreq).sort((a,b)=>b[1]-a[1]).slice(0,30);
+  if(!sorted.length)return '<div class="glass rounded-2xl p-8 text-center text-gray-500">No words to analyze</div>';
+  
+  const maxFreq=sorted[0][1];
+  return `<div class="glass rounded-2xl p-6">
+    <h3 class="text-white font-bold mb-6 flex items-center gap-2"><i data-lucide="type" style="width:18px;height:18px;color:#a855f7"></i> Most Used Words</h3>
+    <div class="space-y-3">
+      ${sorted.map(([word,count])=>{
+        const pct=Math.round(count/maxFreq*100);
+        return `<div>
+          <div class="flex items-center justify-between mb-1"><span class="text-gray-300 font-medium">${word}</span><span class="text-purple-400 text-sm">${count} times</span></div>
+          <div class="h-2 bg-white/5 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:${pct}%;background:linear-gradient(90deg,#a855f7,#d946ef)"></div></div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function renderToxicity(r){
+  const entries=Object.entries(r.participants).map(([name,d])=>({name,toxic:d.toxicCount,spam:d.spamCount,total:d.messages})).sort((a,b)=>b.toxic-a.toxic);
+  const totalToxic=entries.reduce((s,e)=>s+e.toxic,0);
+  const totalSpam=entries.reduce((s,e)=>s+e.spam,0);
+  return `
+    <div class="grid md:grid-cols-2 gap-4 mb-6">
+      <div class="glass rounded-2xl p-5 text-center ${totalToxic>0?'glow-rose':'glow-emerald'}">
+        <div class="text-3xl mb-1">${totalToxic>0?'⚠️':'✅'}</div>
+        <div class="text-2xl font-black ${totalToxic>0?'text-rose-400':'text-emerald-400'}">${totalToxic}</div>
+        <div class="text-gray-500 text-sm">Toxic Messages Detected</div>
+      </div>
+      <div class="glass rounded-2xl p-5 text-center">
+        <div class="text-3xl mb-1">📧</div>
+        <div class="text-2xl font-black text-amber-400">${totalSpam}</div>
+        <div class="text-gray-500 text-sm">Spam-like Messages</div>
+      </div>
+    </div>
+    <div class="glass rounded-2xl p-6">
+      <h3 class="text-white font-bold mb-4">Per-Participant Breakdown</h3>
+      <div class="space-y-3">
+        ${entries.map(e=>`
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-gray-300">${e.name}</span>
+            <div class="flex gap-4">
+              <span class="${e.toxic>0?'text-rose-400':'text-gray-600'}">🛡 ${e.toxic} toxic</span>
+              <span class="${e.spam>0?'text-amber-400':'text-gray-600'}">📧 ${e.spam} spam</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+
+function renderRelationships(r){
+  if(!r.relationships.length)return '<div class="glass rounded-2xl p-8 text-center text-gray-500">Need at least 2 participants for relationship analysis</div>';
+  const maxStr=r.relationships[0]?.strength||1;
+  return `<div class="glass rounded-2xl p-6">
+    <h3 class="text-white font-bold mb-6 flex items-center gap-2"><i data-lucide="link" style="width:18px;height:18px;color:#ec4899"></i> Relationship Strength</h3>
+    <div class="space-y-4">
+      ${r.relationships.slice(0,10).map(rel=>{
+        const pct=Math.round(rel.strength/maxStr*100);
+        const strength=pct>70?'Strong':pct>40?'Moderate':'Light';
+        const emoji=pct>70?'🔥':pct>40?'💬':'💤';
+        return `<div class="glass rounded-xl p-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-white font-medium">${rel.a} ↔ ${rel.b}</span>
+            <span class="text-sm ${pct>70?'text-rose-400':pct>40?'text-purple-400':'text-gray-500'}">${emoji} ${strength}</span>
+          </div>
+          <div class="h-2 bg-white/5 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:${pct}%;background:linear-gradient(90deg,#6366f1,#ec4899)"></div></div>
+          <div class="text-xs text-gray-600 mt-1">${rel.strength} direct exchanges</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function renderPersonality(r){
+  const entries=Object.entries(r.personalities);
+  const traitColors={verbosity:'from-purple-500 to-blue-500',expressiveness:'from-pink-500 to-rose-500',sociability:'from-emerald-500 to-teal-500',nightOwl:'from-violet-500 to-purple-500'};
+  const traitIcons={verbosity:'📝',expressiveness:'😄',sociability:'🤝',nightOwl:'🌙'};
+  return `<div class="space-y-6">
+    ${entries.map(([name,traits])=>`
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-white font-bold mb-4">${name}</h3>
+        <div class="grid grid-cols-2 gap-4">
+          ${Object.entries(traits).filter(([k])=>k!=='avgLen').map(([trait,val])=>`
+            <div>
+              <div class="flex items-center justify-between mb-1 text-sm"><span class="text-gray-400">${traitIcons[trait]||''} ${trait.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</span><span class="text-white font-medium">${val}%</span></div>
+              <div class="h-2 bg-white/5 rounded-full overflow-hidden"><div class="trait-bar bg-gradient-to-r ${traitColors[trait]||'from-gray-500 to-gray-400'}" style="width:${val}%"></div></div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="mt-3 text-xs text-gray-600">Avg message length: ${traits.avgLen} words</div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function renderAddiction(r){
+  const entries=Object.entries(r.addictionScores).sort((a,b)=>b[1]-a[1]);
+  return `<div class="glass rounded-2xl p-6">
+    <h3 class="text-white font-bold mb-2 flex items-center gap-2"><i data-lucide="activity" style="width:18px;height:18px;color:#f43f5e"></i> Chat Addiction Score</h3>
+    <p class="text-gray-500 text-sm mb-6">Based on messaging frequency, active hours, and chat share</p>
+    <div class="space-y-6">
+      ${entries.map(([name,score])=>{
+        const level=score>75?'🔴 High':score>45?'🟡 Moderate':'🟢 Low';
+        const color=score>75?'from-rose-500 to-red-500':score>45?'from-amber-500 to-orange-500':'from-emerald-500 to-green-500';
+        return `<div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-white font-medium">${name}</span>
+            <span class="text-sm ${score>75?'text-rose-400':score>45?'text-amber-400':'text-emerald-400'}">${level} — ${score}/100</span>
+          </div>
+          <div class="h-4 bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r ${color} rounded-full transition-all" style="width:${score}%"></div></div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function renderInitiators(r){
+  const entries=Object.entries(r.participants).map(([name,d])=>({name,initiated:d.initiated,total:d.messages})).sort((a,b)=>b.initiated-a.initiated);
+  const maxInit=entries[0]?.initiated||1;
+  return `<div class="glass rounded-2xl p-6">
+    <h3 class="text-white font-bold mb-2 flex items-center gap-2"><i data-lucide="message-circle" style="width:18px;height:18px;color:#06b6d4"></i> Conversation Initiators</h3>
+    <p class="text-gray-500 text-sm mb-6">Who starts conversations most often</p>
+    <div class="space-y-4">
+      ${entries.map((e,i)=>{
+        const pct=Math.round(e.initiated/maxInit*100);
+        return `<div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-gray-300">${i===0?'🏆 ':''}${e.name}</span>
+            <span class="text-cyan-400 text-sm font-medium">${e.initiated} times</span>
+          </div>
+          <div class="h-2 bg-white/5 rounded-full overflow-hidden"><div class="h-full grad-emerald rounded-full" style="width:${pct}%"></div></div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function renderHighlights(r){
+  if(!r.highlights.length)return '<div class="glass rounded-2xl p-8 text-center text-gray-500">No notable highlights found</div>';
+  return `<div class="glass rounded-2xl p-6">
+    <h3 class="text-white font-bold mb-6 flex items-center gap-2"><i data-lucide="star" style="width:18px;height:18px;color:#f59e0b"></i> Memory Highlights</h3>
+    <div class="space-y-4">
+      ${r.highlights.map(h=>`
+        <div class="glass rounded-xl p-4 hover:bg-white/5 transition">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="px-2.5 py-1 rounded-lg text-xs font-medium ${h.type==='Long Message'?'bg-purple-500/20 text-purple-300':'bg-amber-500/20 text-amber-300'}">${h.type}</span>
+            <span class="text-gray-500 text-xs">${h.date||''}</span>
+          </div>
+          <div class="text-sm text-gray-400"><span class="text-white font-medium">${h.sender}:</span> ${h.preview}</div>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+// ========== DOWNLOAD REPORT ==========
+function downloadReport(){
+  if(!analysisResult)return;
+  const r=analysisResult;
+  let report=`WHATSAPP CHAT ANALYSIS REPORT\n${'='.repeat(40)}\n\n`;
+  report+=`Date Range: ${r.dateRange.start} to ${r.dateRange.end}\n`;
+  report+=`Total Messages: ${r.totalMessages}\n`;
+  report+=`Total Words: ${r.totalWords}\n`;
+  report+=`Total Media: ${r.totalMedia}\n`;
+  report+=`Total Emojis: ${r.totalEmojis}\n`;
+  report+=`Most Active: ${r.mostActive}\n`;
+  report+=`Participants: ${Object.keys(r.participants).length}\n\n`;
+  report+=`PARTICIPANT DETAILS\n${'-'.repeat(30)}\n`;
+  Object.entries(r.participants).forEach(([name,d])=>{
+    const avg=d.msgLengths.length?(d.msgLengths.reduce((a,b)=>a+b,0)/d.msgLengths.length).toFixed(1):'0';
+    report+=`${name}: ${d.messages} msgs, ${d.words} words, ${d.media} media, ${d.emojis} emojis, avg ${avg} words/msg\n`;
+  });
+  report+=`\nTOP EMOJIS\n${'-'.repeat(30)}\n`;
+  r.emojiRank.forEach(([e,c])=>report+=`${e} × ${c}\n`);
+  report+=`\nTOPICS\n${'-'.repeat(30)}\n`;
+  Object.entries(r.topicScores).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).forEach(([t,s])=>report+=`${t}: ${s} mentions\n`);
+  report+=`\nRELATIONSHIPS\n${'-'.repeat(30)}\n`;
+  r.relationships.slice(0,10).forEach(rel=>report+=`${rel.a} ↔ ${rel.b}: ${rel.strength} exchanges\n`);
+  report+=`\nADDICTION SCORES\n${'-'.repeat(30)}\n`;
+  Object.entries(r.addictionScores).forEach(([n,s])=>report+=`${n}: ${s}/100\n`);
+  report+=`\n\nGenerated by ChatAnalyzer Pro — 100% local analysis`;
+
+  const blob=new Blob([report],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='chat-analysis-report.txt';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Report downloaded!','success');
+}
+
+// ========== ELEMENT SDK ==========
+const defaultConfig={
+  app_title:'ChatAnalyzer',
+  tagline:'AI-powered insights from your WhatsApp chats. Discover patterns, sentiments, and hidden dynamics — all without uploading a single byte.',
+  background_color:'#0a0a0f',
+  surface_color:'#ffffff0a',
+  text_color:'#e5e7eb',
+  primary_action_color:'#6366f1',
+  secondary_action_color:'#10b981',
+  font_family:'Outfit',
+  font_size:16
+};
+
+function applyConfig(config){
+  const c={...defaultConfig,...config};
+  const titleEl=document.getElementById('nav-title');
+  if(titleEl)titleEl.textContent=c.app_title;
+  const heroTitle=document.getElementById('hero-title');
+  const heroTag=document.getElementById('hero-tagline');
+  if(heroTag)heroTag.textContent=c.tagline;
+
+  document.body.style.fontFamily=`${c.font_family}, Outfit, sans-serif`;
+  const baseSize=c.font_size||16;
+  document.querySelectorAll('h1').forEach(el=>el.style.fontSize=`${baseSize*3}px`);
+  document.querySelectorAll('h2').forEach(el=>el.style.fontSize=`${baseSize*1.75}px`);
+  document.querySelectorAll('h3').forEach(el=>el.style.fontSize=`${baseSize*1.25}px`);
+  document.querySelectorAll('p,span,td,th,li,a,button,label,input').forEach(el=>{
+    if(!el.closest('svg'))el.style.fontFamily=`${c.font_family}, Outfit, sans-serif`;
+  });
+}
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange:async(config)=>{applyConfig(config)},
+  mapToCapabilities:(config)=>({
+    recolorables:[
+      {get:()=>config.background_color||defaultConfig.background_color,set:v=>{config.background_color=v;window.elementSdk.setConfig({background_color:v})}},
+      {get:()=>config.surface_color||defaultConfig.surface_color,set:v=>{config.surface_color=v;window.elementSdk.setConfig({surface_color:v})}},
+      {get:()=>config.text_color||defaultConfig.text_color,set:v=>{config.text_color=v;window.elementSdk.setConfig({text_color:v})}},
+      {get:()=>config.primary_action_color||defaultConfig.primary_action_color,set:v=>{config.primary_action_color=v;window.elementSdk.setConfig({primary_action_color:v})}},
+      {get:()=>config.secondary_action_color||defaultConfig.secondary_action_color,set:v=>{config.secondary_action_color=v;window.elementSdk.setConfig({secondary_action_color:v})}}
+    ],
+    borderables:[],
+    fontEditable:{get:()=>config.font_family||defaultConfig.font_family,set:v=>{config.font_family=v;window.elementSdk.setConfig({font_family:v})}},
+    fontSizeable:{get:()=>config.font_size||defaultConfig.font_size,set:v=>{config.font_size=v;window.elementSdk.setConfig({font_size:v})}}
+  }),
+  mapToEditPanelValues:(config)=>new Map([
+    ['app_title',config.app_title||defaultConfig.app_title],
+    ['tagline',config.tagline||defaultConfig.tagline]
+  ])
+});
+
+// Init icons
+lucide.createIcons({nameAttr:'data-lucide'});
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dcb605ce4633fe1',t:'MTc3MzU3NjIyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  // Initialize Lucide icons everywhere
+  lucide.createIcons();
+
+});
+// Check login on page load
+window.onload = function () {
+  const user = localStorage.getItem("username");
+  if (user) {
+    showAccount(user);
+  }
+};
+
+function showAccount(username) {
+  document.getElementById("auth-buttons").classList.add("hidden");
+  document.getElementById("account-section").classList.remove("hidden");
+  document.getElementById("username-display").innerText = username;
+
+  lucide.createIcons(); // refresh icons
+}
+
+// Call this after successful login/signup
+function loginSuccess(username) {
+  localStorage.setItem("username", username);
+  showAccount(username);
+  showPage('dashboard'); // redirect
+}
+
+// Logout function
+function logout() {
+  localStorage.removeItem("username");
+
+  document.getElementById("auth-buttons").classList.remove("hidden");
+  document.getElementById("account-section").classList.add("hidden");
+
+  showPage('home');
+}
+//login success
+function loginSuccess(username) {
+  localStorage.setItem("username", username); // store user
+  showAccount(username); // show account UI
+  showPage('dashboard'); // redirect
+}
+// Run when page loads
+window.onload = function () {
+  const user = localStorage.getItem("username");
+
+  if (user) {
+    showAccount(user);   // logged in
+  } else {
+    showAuthButtons();   // not logged in
+  }
+};
+
+// Show login buttons
+function showAuthButtons() {
+  document.getElementById("auth-buttons").classList.remove("hidden");
+  document.getElementById("account-section").classList.add("hidden");
+}
+function showAccount(username) {
+  document.getElementById("auth-buttons").classList.add("hidden");
+  document.getElementById("account-section").classList.remove("hidden");
+
+  document.getElementById("username-display").innerText = username;
+
+  // 👇 Avatar from name
+  const avatar = document.getElementById("user-avatar");
+  avatar.src = `https://ui-avatars.com/api/?name=${username}&background=7c3aed&color=fff`;
+
+  lucide.createIcons();
+}
+document.addEventListener("DOMContentLoaded", function () {
+  const user = localStorage.getItem("username");
+
+  if (user) {
+    showAccount(user);
+  } else {
+    showAuthButtons();
+  }
+});
+function toggleDropdown() {
+  const dropdown = document.getElementById("profile-dropdown");
+  dropdown.classList.toggle("hidden");
+}
+
+// close when clicking outside
+document.addEventListener("click", function (e) {
+  const dropdown = document.getElementById("profile-dropdown");
+  const account = document.getElementById("account-section");
+
+  if (!account.contains(e.target)) {
+    dropdown.classList.add("hidden");
+  }
+});
+if (page === 'dashboard') {
+  loadHistory();
+}
+const user = localStorage.getItem("username");
+console.log("USER:", user);
+if (typeof someLibrary !== "undefined") {
+  someLibrary.init();
+}
+localStorage.setItem("user", JSON.stringify(data.user));
+function checkLogin() {
+    const user = localStorage.getItem("user");
+
+    if (!user) {
+        alert("Please login first!");
+        window.location.href = "login.html";
+        return false;
+    }
+
+    return JSON.parse(user);
+}
+function uploadChat() {
+    const user = checkLogin();
+    if (!user) return;
+
+    const fileInput = document.getElementById("chatFile");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please select a file");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("chat", file);
+    formData.append("user_id", user.id); // 🔥 important
+
+    fetch("http://localhost/myproject/api/upload.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+    });
+}
+</script></body>
+</html>
